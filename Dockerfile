@@ -1,4 +1,4 @@
-FROM ubuntu
+FROM ubuntu:18.04
 MAINTAINER leifj@sunet.se
 RUN apt-get -q update
 RUN apt-get -y upgrade
