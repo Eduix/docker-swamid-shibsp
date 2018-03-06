@@ -134,6 +134,36 @@ ServerName ${SP_HOSTNAME}
 
         AddDefaultCharset utf-8
 
+        RedirectMatch ^/$ /crowd/
+
+        ProxyRequests Off
+        ProxyPreserveHost On
+ 
+        # Preserve the original IP for crowd
+        RemoteIPHeader X-Forwarded-For
+ 
+        <Location /crowd>
+           AuthType shibboleth
+           ShibRequireSession Off
+           require shibboleth
+           ShibUseHeaders on
+
+           ProxyPreserveHost On
+           ProxyPass http://crowd:8095/crowd
+           ProxyPassReverse http://crowd:8095/crowd
+        </Location>
+
+        <Location /crowd/plugins/servlet/ssocookie>
+           AuthType shibboleth
+           ShibRequireSession On
+           require shibboleth
+           ShibUseHeaders on
+
+           ProxyPreserveHost On
+           ProxyPass http://crowd:8095/crowd/plugins/servlet/ssocookie
+           ProxyPassReverse http://crowd:8095/crowd/plugins/servlet/ssocookie
+        </Location>
+
         <Location /secure>
            AuthType shibboleth
            ShibRequireSession On
